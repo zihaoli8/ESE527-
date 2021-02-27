@@ -1,0 +1,52 @@
+---
+title: '2'
+author: '1'
+date: "2021/2/24"
+output: html_document
+---
+
+```{r}
+datasetbegin = read.csv("C:/Users/pc/Desktop/527/googleplaystore.csv",header = T, encoding = 'UTF-8')
+dim(datasetbegin)
+dataset = na.omit(datasetbegin)
+dim(dataset)
+#fix(dataset)
+names(dataset)
+summary(dataset)
+```
+
+```{r}
+dataset1 = subset(dataset,select = -c(App,Price,Reviews,Genres,Last.Updated,Current.Ver))
+dim(dataset1)
+summary(dataset1)
+```
+
+```{r}
+lapply(dataset1,class)
+```
+
+
+```{r}
+library(tidyr)
+dataset2 = separate(dataset1, Size, into = c("Sizenew"),sep = "M")
+dataset3 = separate(dataset2, Installs, into = c("Installsnew"),sep = "\\+")
+lapply(dataset3,class)
+summary(dataset3)
+```
+#转化installnew 成为numeric
+```{r}
+attach(dataset3)
+Installsnew = gsub(",","",Installsnew)
+Installsnew = as.numeric(Installsnew)
+dataset3$Installsnew = Installsnew
+summary(dataset3)
+```
+#see the relationship between installnew and rate
+```{r}
+lapply(dataset,class)
+plot(dataset$Rating, dataset$Reviews, xlim = c(3,5), col = "red")
+```
+
+
+
+
